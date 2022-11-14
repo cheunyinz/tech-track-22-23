@@ -1,0 +1,402 @@
+[
+    {
+        "name": "Coco's Outback",
+        "location": "Rembrandtplein",
+        "coords": {
+            "lat": 52.365475,
+            "long": 4.895538
+        },
+        "times": [
+            {
+                "day": "fridayEvening",
+                "time": "21:00",
+                "busy": 52
+            },
+            {
+                "day": "fridayEvening",
+                "time": "22:00",
+                "busy": 57
+            },
+            {
+                "day": "fridayEvening",
+                "time": "23:00",
+                "busy": 58
+            },
+            {
+                "day": "fridayEvening",
+                "time": "00:00",
+                "busy": 63
+            },
+            {
+                "day": "fridayEvening",
+                "time": "01:00",
+                "busy": 68
+            },
+            {
+                "day": "fridayEvening",
+                "time": "02:00",
+                "busy": 57
+            },
+            {
+                "day": "fridayEvening",
+                "time": "03:00",
+                "busy": 33
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "21:00",
+                "busy": 85
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "22:00",
+                "busy": 94
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "23:00",
+                "busy": 99
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "00:00",
+                "busy": 100
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "01:00",
+                "busy": 92
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "02:00",
+                "busy": 72
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "03:00",
+                "busy": 43
+            }
+        ]
+    },
+    {
+        "name": "Karaokebar 24K",
+        "location": "Rembrandtplein",
+        "coords": {
+            "lat": 52.366677,
+            "long": 4.895689
+        },
+        "times": [
+            {
+                "day": "fridayEvening",
+                "time": "21:00",
+                "busy": 73
+            },
+            {
+                "day": "fridayEvening",
+                "time": "22:00",
+                "busy": 89
+            },
+            {
+                "day": "fridayEvening",
+                "time": "23:00",
+                "busy": 97
+            },
+            {
+                "day": "fridayEvening",
+                "time": "00:00",
+                "busy": 100
+            },
+            {
+                "day": "fridayEvening",
+                "time": "01:00",
+                "busy": 87
+            },
+            {
+                "day": "fridayEvening",
+                "time": "02:00",
+                "busy": 55
+            },
+            {
+                "day": "fridayEvening",
+                "time": "03:00",
+                "busy": 0
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "21:00",
+                "busy": 77
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "22:00",
+                "busy": 91
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "23:00",
+                "busy": 98
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "00:00",
+                "busy": 96
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "01:00",
+                "busy": 83
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "02:00",
+                "busy": 68
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "03:00",
+                "busy": 0
+            }
+        ]
+    },
+    {
+        "name": "Café Kuyl",
+        "location": "Rembrandtplein",
+        "coords": {
+            "lat": 52.36569339010818,
+            "long": 4.896645351784896
+        },
+        "times": [
+            {
+                "day": "fridayEvening",
+                "time": "21:00",
+                "busy": 100
+            },
+            {
+                "day": "fridayEvening",
+                "time": "22:00",
+                "busy": 97
+            },
+            {
+                "day": "fridayEvening",
+                "time": "23:00",
+                "busy": 71
+            },
+            {
+                "day": "fridayEvening",
+                "time": "00:00",
+                "busy": 0
+            },
+            {
+                "day": "fridayEvening",
+                "time": "01:00",
+                "busy": 0
+            },
+            {
+                "day": "fridayEvening",
+                "time": "02:00",
+                "busy": 0
+            },
+            {
+                "day": "fridayEvening",
+                "time": "03:00",
+                "busy": 0
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "21:00",
+                "busy": 47
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "22:00",
+                "busy": 38
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "23:00",
+                "busy": 26
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "00:00",
+                "busy": 0
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "01:00",
+                "busy": 0
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "02:00",
+                "busy": 0
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "03:00",
+                "busy": 0
+            }
+        ]
+    },
+    {
+        "name": "Hunter's Bar",
+        "location": "Rembrandtplein",
+        "coords": {
+            "lat": 52.36569339010818,
+            "long": 4.896645351784896
+        },
+        "times": [
+            {
+                "day": "fridayEvening",
+                "time": "21:00",
+                "busy": 80
+            },
+            {
+                "day": "fridayEvening",
+                "time": "22:00",
+                "busy": 87
+            },
+            {
+                "day": "fridayEvening",
+                "time": "23:00",
+                "busy": 81
+            },
+            {
+                "day": "fridayEvening",
+                "time": "00:00",
+                "busy": 69
+            },
+            {
+                "day": "fridayEvening",
+                "time": "01:00",
+                "busy": 62
+            },
+            {
+                "day": "fridayEvening",
+                "time": "02:00",
+                "busy": 0
+            },
+            {
+                "day": "fridayEvening",
+                "time": "03:00",
+                "busy": 0
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "21:00",
+                "busy": 100
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "22:00",
+                "busy": 93
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "23:00",
+                "busy": 80
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "00:00",
+                "busy": 70
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "01:00",
+                "busy": 66
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "02:00",
+                "busy": 0
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "03:00",
+                "busy": 0
+            }
+        ]
+    },
+    {
+        "name": "Club Prime",
+        "location": "Rembrandtplein",
+        "coords": {
+            "lat": 52.36616947289008,
+            "long": 4.896212643478693
+        },
+        "times": [
+            {
+                "day": "fridayEvening",
+                "time": "21:00",
+                "busy": 10
+            },
+            {
+                "day": "fridayEvening",
+                "time": "22:00",
+                "busy": 25
+            },
+            {
+                "day": "fridayEvening",
+                "time": "23:00",
+                "busy": 48
+            },
+            {
+                "day": "fridayEvening",
+                "time": "00:00",
+                "busy": 65
+            },
+            {
+                "day": "fridayEvening",
+                "time": "01:00",
+                "busy": 61
+            },
+            {
+                "day": "fridayEvening",
+                "time": "02:00",
+                "busy": 81
+            },
+            {
+                "day": "fridayEvening",
+                "time": "03:00",
+                "busy": 59
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "21:00",
+                "busy": 25
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "22:00",
+                "busy": 37
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "23:00",
+                "busy": 56
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "00:00",
+                "busy": 79
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "01:00",
+                "busy": 100
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "02:00",
+                "busy": 100
+            },
+            {
+                "day": "saturdayEvening",
+                "time": "03:00",
+                "busy": 75
+            }
+        ]
+    }
+]

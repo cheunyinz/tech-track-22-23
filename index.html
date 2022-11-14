@@ -1,16 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tech-track Boilerplate App</title>
-  </head>
-  <body>
-    <h1>Tech Track boilerplate</h1>
 
-    <img src="./images/tt.png" alt="Tech Track logo" />
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech-track Boilerplate App</title>
+  <script type="module" src="./scripts/main.js" defer></script>
+</head>
 
-    <script type="module" src="./scripts/main.js"></script>
-  </body>
+<body>
+
+  <header>
+
+  </header>
+
+  <main>
+    <section class="barchart">
+      <div class="barchart__filter">
+        <p>Populair locations on</p>
+        <select id="day-select" class="barchart__select">
+          <option value="fridayEvening">
+            Friday Evening
+          </option>
+          <option value="saturdayEvening">
+            Saturday Evening
+          </option>
+        </select>
+        <p>at</p>
+        <select id="time-select" class="barchart__select">
+          <option value="21:00">
+            21:00
+          </option>
+          <option value="22:00">
+            22:00
+          </option>
+          <option value="23:00">
+            23:00
+          </option>
+          <option value="00:00">
+            00:00
+          </option>
+          <option value="01:00">
+            01:00
+          </option>
+          <option value="02:00">
+            02:00
+          </option>
+          <option value="03:00">
+            03:00
+          </option>
+        </select>
+      </div>
+      <svg class="barchart__innner" viewbox="0 0 800 800">
+        <g id="labels" class="barchart__labels"></g>
+        <g id="bars" class="bartchart__bars" transform="translate(200, 0)">
+        </g>
+      </svg>
+    </section>
+  </main>
+
+  <footer>
+
+  </footer>
+
+</body>
+
 </html>

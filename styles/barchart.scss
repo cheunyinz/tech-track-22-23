@@ -1,0 +1,13 @@
+.barchart {
+    width: min(100% - 2rem, 75rem);
+    margin-inline: auto;
+
+    &__filter {
+        display: grid;
+        gap: 1rem;
+    }
+
+    &__select {
+        all: unset;
+    }
+}
