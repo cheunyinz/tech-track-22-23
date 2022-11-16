@@ -17,44 +17,27 @@
 
   <main>
     <section class="barchart">
-      <div class="barchart__filter">
-        <p>Populair locations on</p>
-        <select id="day-select" class="barchart__select">
-          <option value="fridayEvening">
-            Friday Evening
-          </option>
-          <option value="saturdayEvening">
-            Saturday Evening
-          </option>
-        </select>
-        <p>at</p>
-        <select id="time-select" class="barchart__select">
-          <option value="21:00">
-            21:00
-          </option>
-          <option value="22:00">
-            22:00
-          </option>
-          <option value="23:00">
-            23:00
-          </option>
-          <option value="00:00">
-            00:00
-          </option>
-          <option value="01:00">
-            01:00
-          </option>
-          <option value="02:00">
-            02:00
-          </option>
-          <option value="03:00">
-            03:00
-          </option>
-        </select>
-      </div>
-      <svg class="barchart__innner" viewbox="0 0 800 800">
+      <form class="barchart__filter">
+        <fieldset>
+          <legend>Populair locations on</legend>
+          <select id="day-select" class="barchart__select">
+            <option value="" selected disabled hidden>Select the day</option>
+            <option value="fridayEvening">
+              Friday Evening
+            </option>
+            <option value="saturdayEvening">
+              Saturday Evening
+            </option>
+          </select>
+          <p>at</p>
+          <select id="time-select" class="barchart__select">
+            <option value="" selected disabled hidden>Select the time</option>
+          </select>
+        </fieldset>
+      </form>
+      <svg class="barchart__inner" viewbox="0 0 800 500">
         <g id="labels" class="barchart__labels"></g>
-        <g id="bars" class="bartchart__bars" transform="translate(200, 0)">
+        <g id="bars" class="bartchart__bars" transform="translate(300, 0)">
         </g>
       </svg>
     </section>

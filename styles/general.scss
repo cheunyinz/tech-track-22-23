@@ -23,10 +23,33 @@ body {
     min-height: 100vh;
     text-rendering: optimizespeed;
     line-height: 1.6;
+    background-color: var(--madison);
+    font-family: 'Source Sans Pro', sans-serif;
 
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Montserrat', sans-serif;
 }
 
 ol,
 ul {
     list-style: none
 }
+
+:root {
+    --madison: #082A5E;
+    --white: #FFFFFF;
+    --main-width: min(100% - 2rem, 60rem);
+    --xs-whitespace: .25rem;
+    --sm-whitespace: .5rem;
+    --md-whitespace: 1rem;
+    --lg-whitespace: 1.5rem;
+    --xl-whitespace: 2rem;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;700&display=swap');
