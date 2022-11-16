@@ -1,16 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tech-track Boilerplate App</title>
-  </head>
-  <body>
-    <h1>Tech Track boilerplate</h1>
 
-    <img src="./images/tt.png" alt="Tech Track logo" />
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tech-track Boilerplate App</title>
+  <script type="module" src="./scripts/main.js" defer></script>
+</head>
 
-    <script type="module" src="./scripts/main.js"></script>
-  </body>
+<body>
+
+  <header>
+
+  </header>
+
+  <main>
+    <section class="barchart">
+      <form class="barchart__filter">
+        <fieldset>
+          <legend>Populair locations on</legend>
+          <select id="day-select" class="barchart__select">
+            <option value="" selected disabled hidden>Select the day</option>
+            <option value="fridayEvening">
+              Friday Evening
+            </option>
+            <option value="saturdayEvening">
+              Saturday Evening
+            </option>
+          </select>
+          <p>at</p>
+          <select id="time-select" class="barchart__select">
+            <option value="" selected disabled hidden>Select the time</option>
+          </select>
+        </fieldset>
+      </form>
+      <svg class="barchart__inner" viewbox="0 0 800 500">
+        <g id="labels" class="barchart__labels"></g>
+        <g id="bars" class="bartchart__bars" transform="translate(300, 0)">
+        </g>
+      </svg>
+    </section>
+  </main>
+
+  <footer>
+
+  </footer>
+
+</body>
+
 </html>
