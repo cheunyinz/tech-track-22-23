@@ -4,6 +4,8 @@ import '../styles/main.scss'
 // We can use node_modules directely in the browser!
 import * as d3 from 'd3';
 import { gsap } from "gsap";
+import { CSSPlugin } from 'gsap/CSSPlugin';
+gsap.registerPlugin(CSSPlugin);
 
 import locations from '../locations.json' assert {type: 'json'};
 import { filter, timeMinute } from 'd3';
@@ -11,7 +13,14 @@ import { filter, timeMinute } from 'd3';
 
 const daySelector = document.querySelector('#day-select');
 const timeSelector = document.querySelector('#time-select');
+const sortButton = document.querySelector('#sorting');
 
+const chartWidth = 600
+const chartHeight = 500
+
+var xScale
+
+var yScale
 //generate dropdown menu
 
 function fillDropdown() {
@@ -36,7 +45,6 @@ function fillDropdown() {
     // locationsDays = locations[0].times.map((day) => {
     //     return day.day;
     // })
-
 
     // let uniqueDays = [...new Set(locationsDays)];
 
@@ -65,33 +73,36 @@ function filterData(d, t) {
             times: location.times.filter(time => (timeFilter.includes(time.time) && dayFilter.includes(time.day)))
         }
     })
-    console.log(filteredData);
     sortData(filteredData);
-};
 
+    xScale = d3.scaleLinear()
+        .domain([0, d3.max(filteredData, d => d.times[0].busy)])
+        .range([0, chartWidth]);
 
-function sortData(data) {
-    data = data.sort((a, b) => {
-        return a.times[0].busy - b.times[0].busy;
-    })
-}
-
-
-//d3 bar chart
-
-function drawChart() {
-    const chartWidth = 600
-    const chartHeight = 500
-
-    const yScale = d3.scaleBand()
+    yScale = d3.scaleBand()
         .domain(d3.map(filteredData, d => d.name))
         .range([0, chartHeight])
         .paddingInner(1);
 
-    const xScale = d3.scaleLinear()
-        .domain([0, d3.max(filteredData, d => d.times[0].busy)])
-        .range([0, chartWidth])
+};
 
+function sortData(data, d) {
+    let value;
+    if (d === true) {
+        value = a, b;
+    } else {
+        value = b, a;
+    }
+    data = data.sort((value) => {
+        return a.times[0].busy - b.times[0].busy;
+    })
+};
+
+
+//d3 bar chart
+
+
+function drawChart() {
 
     d3.select('#labels')
         .selectAll('text')
@@ -112,6 +123,7 @@ function drawChart() {
         .attr('width', d => xScale(d.times[0].busy)) //veranderd de busy per locatie op basis van tijd.
         .attr('y', d => yScale(d.name));
 
+    //dit is voor de closed text   
     d3.select('#bars')
         .selectAll('text')
         .data(filteredData)
@@ -120,25 +132,62 @@ function drawChart() {
         .attr('class', 'barchart__text')
         .attr('y', d => yScale(d.name) + 20)
         .text(d => (d.times[0].busy) <= 0 ? "Closed" : "");
+};
+
+function updateChart() {
+    d3.select('svg').transition().duration(750);
+    d3.select('#bars')
+        .selectAll('rect')
+        .data(filteredData)
+        .join(
+            enter => {
+                enter
+            },
+            update => {
+                update.each((d, i) => {
+                    animateWidth(update.nodes()[i], xScale(d.times[0].busy))
+                    return
+                });
+            })
+    d3.select('#bars')
+        .selectAll('text')
+        .data(filteredData)
+        .join('text')
+        .text(d => (d.times[0].busy) <= 0 ? "Closed" : "");
+
+    d3.select('#labels')
+        .selectAll('text')
+        .data(filteredData)
+        .join('text')
+        .text(d => d.name);
 }
 
-gsap.from(".bartchart__bars rect", {
-    stagger: 0.3,
-    rotate: '360deg',
-    scale: 1.5,
-    repeat: -1,
-    duration: 1
-})
+function animateWidth(node, data) {
+    console.log('animation')
+    gsap.to(node, {
+        width: data,
+        // ease: 'elastic',
+        duration: .3
+    })
 
+    gsap.from(node, {
+        duration: .3
+    })
+
+    return;
+}
 
 
 
 window.addEventListener('DOMContentLoaded', (d, t) => {
     fillDropdown();
-    daySelector.addEventListener("change", (d) => drawChart(filterData(daySelector.value, timeSelector.value)));
-    timeSelector.addEventListener("change", (t) => drawChart(filterData(daySelector.value, timeSelector.value)));
-    drawChart(filterData());
+    drawChart(filterData("saturdayEvening", "01:00"));
+    daySelector.addEventListener("change", (d) => updateChart(filterData(daySelector.value, timeSelector.value)));
+    timeSelector.addEventListener("change", (t) => updateChart(filterData(daySelector.value, timeSelector.value)));
 });
+
+sortButton.addEventListener("click", sortData(d));
+
 
 
 

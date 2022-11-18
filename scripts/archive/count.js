@@ -1,60 +1,87 @@
-function updateChart(weekNumber) {
-	weekNumber = Number(weekNumber);
-	const dataSet = filterData(weekNumber);
-	drawChart(dataSet);
-}
+const dataSet = [{ "Jaar": 1991, "Aantal": 1 }, { "Jaar": 1992, "Aantal": 0 }, { "Jaar": 1993, "Aantal": 4 }, { "Jaar": 1994, "Aantal": 7 }, { "Jaar": 1995, "Aantal": 4 }, { "Jaar": 1996, "Aantal": 8 }, { "Jaar": 1997, "Aantal": 7 }, { "Jaar": 1998, "Aantal": 6 }, { "Jaar": 1999, "Aantal": 5 }, { "Jaar": 2000, "Aantal": 8 }, { "Jaar": 2001, "Aantal": 2 }, { "Jaar": 2002, "Aantal": 4 }, { "Jaar": 2003, "Aantal": 14 }, { "Jaar": 2004, "Aantal": 6 }, { "Jaar": 2005, "Aantal": 11 }, { "Jaar": 2006, "Aantal": 21 }, { "Jaar": 2007, "Aantal": 12 }, { "Jaar": 2008, "Aantal": 11 }, { "Jaar": 2009, "Aantal": 18 }, { "Jaar": 2010, "Aantal": 16 }, { "Jaar": 2011, "Aantal": 29 }, { "Jaar": 2012, "Aantal": 20 }, { "Jaar": 2013, "Aantal": 30 }, { "Jaar": 2014, "Aantal": 20 }, { "Jaar": 2015, "Aantal": 23 }, { "Jaar": 2016, "Aantal": 13 }, { "Jaar": 2017, "Aantal": 18 }, { "Jaar": 2018, "Aantal": 15 }, { "Jaar": 2019, "Aantal": 11 }, { "Jaar": 2020, "Aantal": 17 }]
 
-function filterData(weekNumber) {
+const chartWidth = 700
+const chartHeight = 800
 
-	const dataSet = [
-		{ week: 1, day: "Monday", cars: 10 },
-		{ week: 1, day: "Tuesday", cars: 50 },
-		{ week: 1, day: "Wednesday", cars: 80 },
-		{ week: 1, day: "Thursday", cars: 150 },
-		{ week: 2, day: "Monday", cars: 300 },
-		{ week: 2, day: "Tuesday", cars: 200 },
-		{ week: 2, day: "Wednesday", cars: 150 },
-		{ week: 2, day: "Thursday", cars: 73 },
-		{ week: 2, day: "Friday", cars: 130 },
-		{ week: 2, day: "Saturday", cars: 25 },
-		{ week: 2, day: "Sunday", cars: 10 }
-	];
+const color = ['red', 'blue', 'green', 'yellow', 'rebeccapurple'];
 
-	return dataSet.filter((d) => d.week === weekNumber);
-}
+const xScale = d3.scaleLinear()
+	.domain([0, d3.max(dataSet, d => d.Aantal)])
+	.range([0, chartWidth]);
 
-function drawChart(dataSet) {
-	const pointScale = d3
-		.scalePoint()
-		.domain(d3.map(dataSet, (d) => d.day))
-		.range([0, 700]);
+const yScale = d3.scaleBand()
+	.domain(d3.map(dataSet, d => d.Jaar))
+	.range([0, chartHeight])
+	.paddingInner(0.05);
 
-	const sqrtScale = d3
-		.scaleSqrt()
-		.domain(d3.extent(dataSet, (d) => d.cars))
-		.range([1, 30]);
+d3.select('#bars')
+	.selectAll('rect')
+	.data(dataSet)
+	.join('rect')
+	.attr('height', 25) //yScale.bandwith())
+	.attr('width', d => xScale(d.Aantal))
+	.attr('y', d => yScale(d.Jaar))
+	.classed('animate__animated animate__headShake animate__infinite', () => Math.random() > 0.8)
+	.classed('animate__slower', () => Math.random() > 0.5)
 
-	const colorScaleLinear = d3
-		.scaleLinear()
-		.domain(d3.extent(dataSet, (d) => d.cars))
-		.range(["red", "darkred"]);
+d3.select('#labels')
+	.selectAll('text')
+	.data(dataSet)
+	.join('text')
+	.attr('y', d => yScale(d.Jaar) + 15)
+	.text(d => d.Jaar);
 
-	d3.select("#scale1")
-		.selectAll("circle")
+setInterval(updateData, 6000);
+updateData();
+
+function updateData() {
+	dataSet.forEach(item => {
+		item['Aantal'] = randomNumber(0, 25)
+	})
+
+	d3.select('svg').transition().duration(750);
+
+	const t = d3.select('svg').transition()
+		.duration(750);
+
+	d3.select('#bars')
+		.selectAll('rect')
 		.data(dataSet)
-		.join("circle")
-		.transition()
-		.duration(500)
-		.attr("r", (d) => sqrtScale(d.cars))
-		.attr("cx", (d) => pointScale(d.day))
-		.attr("fill", (d) => colorScaleLinear(d.cars));
+		.join(enter => enter
+			.text(d => d),
+			update => {
+				update.each((d, i) => {
+					animateWidth(update.nodes()[i], xScale(d.Aantal))
+		
+					return;
+				})
+				// update.attr('width', (d, i) => , i))
+			},
+			exit => exit
+				.attr("fill", "brown")
+				.call(exit => exit.transition(t)
+					.remove())
+		);
 
-	const axisBottom = d3.axisBottom(pointScale).tickFormat((s) => s.slice(0, 2));
-
-	d3.select("#axis1").call(axisBottom);
 }
 
-window.addEventListener('DOMContentLoaded', (e) => {
-	d3.selectAll("button").on("click", (e) => updateChart(e.target.value));
-	updateChart(0);
-});
+function animateWidth(node, data) {
+	gsap.to(node, {
+		width: data,
+		fill: color[randomNumber(0, 4)],
+		ease: 'elastic',
+		duration: 1
+	})
+
+	gsap.from(node, {
+		rotate: `${randomNumber(-90, 270)}deg`,
+		scale: `0.${randomNumber(1, 3)}`,
+		duration: 1
+	})
+	return;
+}
+
+
+function randomNumber(min, max) { // min and max included 
+	return Math.floor(Math.random() * (max - min + 1) + min)
+}
