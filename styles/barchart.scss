@@ -23,8 +23,29 @@
     }
 
     &__select {
-        all: unset;
+
+        background: none;
+        border: none;
+        display: block;
+        width: fit-content;
+        font-weight: 600;
+
     }
+
+    &__sorting {
+        background-color: #bc5f04;
+        color: var(--white);
+        text-align: center;
+        grid-column: -1 / 1;
+        border-radius: 5px;
+        font-size: .75rem;
+        padding-block: var(--xs-whitespace);
+
+        input {
+            all: unset;
+        }
+    }
+
 
     &__inner {
         margin-top: var(--lg-whitespace);

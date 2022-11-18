@@ -15,7 +15,7 @@ const daySelector = document.querySelector('#day-select');
 const timeSelector = document.querySelector('#time-select');
 const sortButton = document.querySelector('#sorting');
 
-const chartWidth = 600;
+const chartWidth = 500;
 const chartHeight = 500;
 
 var xScale;
@@ -62,7 +62,6 @@ function fillDropdown() {
 let filteredData = [];
 
 function filterData(d, t) {
-    console.log("filter data");
     let dayFilter = d;
     let timeFilter = t;
 
@@ -88,15 +87,14 @@ function filterData(d, t) {
 };
 
 function sortData(data) {
-    console.log("sortdata");
     let sortOrder;
 
     if (sortButton.checked === true) {
         sortOrder = true;
-        console.log(sortButton, "true");
+        sortButton.textContent = "Sort busy low to high";
     } else {
         sortOrder = false;
-        console.log(sortButton, "false");
+        sortButton.textContent = "Sort busy high to low";
     }
 
     data = data.sort((a, b) => {
@@ -145,7 +143,6 @@ function drawChart() {
 };
 
 function updateChart() {
-    console.log("updatechart");
     d3.select('svg').transition().duration(750);
     d3.select('#bars')
         .selectAll('rect')
@@ -173,10 +170,10 @@ function updateChart() {
         .text(d => d.name);
 }
 
+//barchart animation
 function animateWidth(node, data) {
     gsap.to(node, {
         width: data,
-        // ease: 'elastic',
         duration: .3
     })
 
