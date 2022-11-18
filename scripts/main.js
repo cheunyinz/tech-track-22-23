@@ -15,12 +15,12 @@ const daySelector = document.querySelector('#day-select');
 const timeSelector = document.querySelector('#time-select');
 const sortButton = document.querySelector('#sorting');
 
-const chartWidth = 600
-const chartHeight = 500
+const chartWidth = 600;
+const chartHeight = 500;
 
-var xScale
+var xScale;
 
-var yScale
+var yScale;
 //generate dropdown menu
 
 function fillDropdown() {
@@ -32,7 +32,7 @@ function fillDropdown() {
     //create a array with only the times
     locationsTimes = locations[0].times.map((time) => {
         return time.time;
-    })
+    });
 
     //delete duplicate values
     let uniqueTimes = [...new Set(locationsTimes)];
@@ -40,7 +40,7 @@ function fillDropdown() {
     //push values in options
     uniqueTimes.forEach(time => {
         timesOutput += `<option value="${time}">${time}</option>`;
-    })
+    });
 
     // locationsDays = locations[0].times.map((day) => {
     //     return day.day;
@@ -62,6 +62,7 @@ function fillDropdown() {
 let filteredData = [];
 
 function filterData(d, t) {
+    console.log("filter data");
     let dayFilter = d;
     let timeFilter = t;
 
@@ -71,8 +72,8 @@ function filterData(d, t) {
             location: location.location,
             coords: { lat: location.coords.lat, long: location.coords.long },
             times: location.times.filter(time => (timeFilter.includes(time.time) && dayFilter.includes(time.day)))
-        }
-    })
+        };
+    });
     sortData(filteredData);
 
     xScale = d3.scaleLinear()
@@ -86,21 +87,30 @@ function filterData(d, t) {
 
 };
 
-function sortData(data, d) {
-    let value;
-    if (d === true) {
-        value = a, b;
+function sortData(data) {
+    console.log("sortdata");
+    let sortOrder;
+
+    if (sortButton.checked === true) {
+        sortOrder = true;
+        console.log(sortButton, "true");
     } else {
-        value = b, a;
+        sortOrder = false;
+        console.log(sortButton, "false");
     }
-    data = data.sort((value) => {
-        return a.times[0].busy - b.times[0].busy;
+
+    data = data.sort((a, b) => {
+        if (sortOrder === true) {
+            return a.times[0].busy - b.times[0].busy;
+        } else {
+            return b.times[0].busy - a.times[0].busy;
+        }
+
     })
 };
 
 
 //d3 bar chart
-
 
 function drawChart() {
 
@@ -135,6 +145,7 @@ function drawChart() {
 };
 
 function updateChart() {
+    console.log("updatechart");
     d3.select('svg').transition().duration(750);
     d3.select('#bars')
         .selectAll('rect')
@@ -163,7 +174,6 @@ function updateChart() {
 }
 
 function animateWidth(node, data) {
-    console.log('animation')
     gsap.to(node, {
         width: data,
         // ease: 'elastic',
@@ -177,16 +187,16 @@ function animateWidth(node, data) {
     return;
 }
 
-
-
-window.addEventListener('DOMContentLoaded', (d, t) => {
+window.addEventListener('DOMContentLoaded', () => {
     fillDropdown();
     drawChart(filterData("saturdayEvening", "01:00"));
-    daySelector.addEventListener("change", (d) => updateChart(filterData(daySelector.value, timeSelector.value)));
-    timeSelector.addEventListener("change", (t) => updateChart(filterData(daySelector.value, timeSelector.value)));
+    daySelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
+    timeSelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
 });
 
-sortButton.addEventListener("click", sortData(d));
+sortButton.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
+// sortButton.addEventListener("change", () => { console.log("change") });
+
 
 
 
