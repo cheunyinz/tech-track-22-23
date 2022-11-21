@@ -9,7 +9,6 @@
         "times": [
             {
                 "day": "fridayEvening",
-                
                 "time": "21:00",
                 "busy": 52
             },
@@ -164,8 +163,8 @@
         "name": "Café Kuyl",
         "location": "Rembrandtplein",
         "coords": {
-            "lat": 52.36569339010818,
-            "long": 4.896645351784896
+            "lat": 52.3656391915583,
+            "long": 4.896662480330934
         },
         "times": [
             {
@@ -244,8 +243,8 @@
         "name": "Hunter's Bar",
         "location": "Rembrandtplein",
         "coords": {
-            "lat": 52.36569339010818,
-            "long": 4.896645351784896
+            "lat": 52.36546582700997,
+            "long": 4.897562287852172
         },
         "times": [
             {
@@ -324,8 +323,8 @@
         "name": "Club Prime",
         "location": "Rembrandtplein",
         "coords": {
-            "lat": 52.36616947289008,
-            "long": 4.896212643478693
+            "lat": 52.365629,
+            "long": 4.8963052
         },
         "times": [
             {

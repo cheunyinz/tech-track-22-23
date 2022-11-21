@@ -1,6 +1,4 @@
 .barchart {
-    width: var(--main-width);
-    margin-inline: auto;
     margin-top: var(--xl-whitespace);
     padding-inline: var(--md-whitespace);
     padding-top: var(--lg-whitespace);
@@ -23,7 +21,6 @@
     }
 
     &__select {
-
         background: none;
         border: none;
         display: block;

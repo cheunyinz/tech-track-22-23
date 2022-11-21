@@ -1,14 +1,17 @@
+// import * as dotenv from 'dotenv'
+// dotenv.config()
 // Our bundler automatically creates styling when imported in the main JS file!
 import '../styles/main.scss'
 
 // We can use node_modules directely in the browser!
 import * as d3 from 'd3';
+import { leaflet } from "leaflet";
 import { gsap } from "gsap";
 import { CSSPlugin } from 'gsap/CSSPlugin';
 gsap.registerPlugin(CSSPlugin);
 
 import locations from '../locations.json' assert {type: 'json'};
-import { filter, timeMinute } from 'd3';
+import { create, filter, timeMinute } from 'd3';
 
 
 const daySelector = document.querySelector('#day-select');
@@ -62,6 +65,8 @@ function fillDropdown() {
 let filteredData = [];
 
 function filterData(d, t) {
+    console.log("filterdata functie");
+
     let dayFilter = d;
     let timeFilter = t;
 
@@ -74,7 +79,7 @@ function filterData(d, t) {
         };
     });
     sortData(filteredData);
-
+    //OPSPLITEN IN TWEE APPARTE FUNCTIE .
     xScale = d3.scaleLinear()
         .domain([0, d3.max(filteredData, d => d.times[0].busy)])
         .range([0, chartWidth]);
@@ -84,6 +89,7 @@ function filterData(d, t) {
         .range([0, chartHeight])
         .paddingInner(1);
 
+    console.log(filteredData);
 };
 
 function sortData(data) {
@@ -111,7 +117,7 @@ function sortData(data) {
 //d3 bar chart
 
 function drawChart() {
-
+    console.log("drawChart functie");
     d3.select('#labels')
         .selectAll('text')
         .data(filteredData)
@@ -143,6 +149,7 @@ function drawChart() {
 };
 
 function updateChart() {
+    console.log("updateChart functie");
     d3.select('svg').transition().duration(750);
     d3.select('#bars')
         .selectAll('rect')
@@ -184,15 +191,85 @@ function animateWidth(node, data) {
     return;
 }
 
+//leaflet
+
+var map;
+
+function loadMap() {
+    console.log("load map")
+
+    map = L.map('map').setView([52.3661034287496, 4.8964865409214715], 18);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2hldW5ubCIsImEiOiJjbGFyZXB3MXQxczRwM251cm1zb3ZvMXhrIn0.sAdovAzrb7WWuUzqzKuYKA', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        id: 'mapbox/dark-v11',
+    }).addTo(map);
+
+    addMarkers();
+
+};
+
+function updateMap() {
+    console.log("update map");
+
+    map.remove();
+    loadMap();
+}
+
+function addMarkers() {
+
+    console.log("add marker")
+
+    filteredData.forEach(location => {
+
+        console.log(location.times[0].busy);
+        let icon;
+
+        if (location.times[0].busy === 0) {
+            icon = L.divIcon({
+                html: "<i></i>",
+                className: 'animated-icon animated-icon--empty'
+            })
+        } else if (location.times[0].busy < 25) {
+            icon = L.divIcon({
+                html: "<i></i>",
+                className: 'animated-icon animated-icon--low'
+            })
+        } else if (location.times[0].busy < 75) {
+            icon = L.divIcon({
+                html: "<i></i>",
+                className: 'animated-icon animated-icon--medium'
+            })
+        } else {
+            icon = L.divIcon({
+                html: "<i></i>",
+                className: 'animated-icon animated-icon--high '
+            })
+        }
+
+        L.marker([location.coords.lat, location.coords.long], { icon: icon }).addTo(map)
+            .bindPopup(`${location.name}`)
+    })
+}
+
+// window.addEventListener('DOMContentLoaded', () => {
+//     fillDropdown();
+//     drawChart(filterData("saturdayEvening", "01:00"));
+//     daySelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
+//     timeSelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
+// });
+
+// sortButton.addEventListener("change", () => { console.log("change") });
+
 window.addEventListener('DOMContentLoaded', () => {
     fillDropdown();
-    drawChart(filterData("saturdayEvening", "01:00"));
-    daySelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
-    timeSelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
+    loadMap(filterData("saturdayEvening", "01:00"));
+    daySelector.addEventListener("change", () => updateMap(filterData(daySelector.value, timeSelector.value)));
+    timeSelector.addEventListener("change", () => updateMap(filterData(daySelector.value, timeSelector.value)));
 });
 
 sortButton.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
-// sortButton.addEventListener("change", () => { console.log("change") });
+
 
 
 

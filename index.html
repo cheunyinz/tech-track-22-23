@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tech-track Boilerplate App</title>
   <script type="module" src="./scripts/main.js" defer></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
 </head>
 
 <body>
@@ -16,7 +19,7 @@
   </header>
 
   <main>
-    <section class="barchart">
+    <section class="barchart container">
       <form class="barchart__filter">
         <fieldset>
           <legend>Populair locations on</legend>
@@ -38,12 +41,15 @@
           </label>
         </fieldset>
       </form>
-      <svg class="barchart__inner" viewbox="0 0 800 600">
+      <!-- <svg class="barchart__inner" viewbox="0 0 800 600">
         <g id="labels" class="barchart__labels"></g>
         <g id="bars" class="barchart__bars" transform="translate(300, 0)">
         </g>
-      </svg>
+      </svg> -->
     </section>
+    <section class="container" id="map"></section>
+
+    <a href="http://google.nl"> google</a>
   </main>
 
   <footer>
