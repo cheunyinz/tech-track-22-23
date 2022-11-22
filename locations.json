@@ -3,8 +3,8 @@
         "name": "Coco's Outback",
         "location": "Rembrandtplein",
         "coords": {
-            "lat": 52.365475,
-            "long": 4.895538
+            "lat": 52.36549343255577,
+            "long": 4.895472625098232
         },
         "times": [
             {
@@ -83,8 +83,8 @@
         "name": "Karaokebar 24K",
         "location": "Rembrandtplein",
         "coords": {
-            "lat": 52.366677,
-            "long": 4.895689
+            "lat": 52.36670163869822,
+            "long": 4.8956910350831695
         },
         "times": [
             {
@@ -243,8 +243,8 @@
         "name": "Hunter's Bar",
         "location": "Rembrandtplein",
         "coords": {
-            "lat": 52.36546582700997,
-            "long": 4.897562287852172
+            "lat": 52.3653926,
+            "long": 4.8975642
         },
         "times": [
             {

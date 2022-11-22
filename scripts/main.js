@@ -1,5 +1,6 @@
 // import * as dotenv from 'dotenv'
 // dotenv.config()
+
 // Our bundler automatically creates styling when imported in the main JS file!
 import '../styles/main.scss'
 
@@ -194,15 +195,22 @@ function animateWidth(node, data) {
 //leaflet
 
 var map;
+// const mapApiKey = process.env.MAPBOX_API_KEY;
+
 
 function loadMap() {
     console.log("load map")
 
     map = L.map('map').setView([52.3661034287496, 4.8964865409214715], 18);
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2hldW5ubCIsImEiOiJjbGFyZXB3MXQxczRwM251cm1zb3ZvMXhrIn0.sAdovAzrb7WWuUzqzKuYKA', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        id: 'mapbox/dark-v11',
+    // L.tileLayer('<https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2hldW5ubCIsImEiOiJjbGFyZXB3MXQxczRwM251cm1zb3ZvMXhrIn0.sAdovAzrb7WWuUzqzKuYKA', {
+    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    //     id: 'mapbox/dark-v11',
+    // }).addTo(map);
+
+
+    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+        attribution: '© <a href="https://stadiamaps.com/">Stadia Maps</a>, © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
     }).addTo(map);
 
     addMarkers();
