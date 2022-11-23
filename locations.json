@@ -2,6 +2,8 @@
     {
         "name": "Coco's Outback",
         "location": "Rembrandtplein",
+        "placeid": "ChIJJYouQZUJxkcRPLnmL3YVm6o",
+        "urlencodedname": "Coco's+Outback,+Thorbeckeplein,+Amsterdam",
         "coords": {
             "lat": 52.36549343255577,
             "long": 4.895472625098232
@@ -82,6 +84,8 @@
     {
         "name": "Karaokebar 24K",
         "location": "Rembrandtplein",
+        "placeid": "ChIJ93YX4r8JxkcRNykyzctEmH4",
+        "urlencodedname": "Karaokebar+24K,+Halvemaansteeg,+Amsterdam",
         "coords": {
             "lat": 52.36670163869822,
             "long": 4.8956910350831695
@@ -162,6 +166,8 @@
     {
         "name": "Café Kuyl",
         "location": "Rembrandtplein",
+        "placeid": "ChIJj_0__IgJxkcRy_PlHlnl93I",
+        "urlencodedname": "Café+Kuyl,+Rembrandtplein,+Amsterdam",
         "coords": {
             "lat": 52.3656391915583,
             "long": 4.896662480330934
@@ -242,6 +248,8 @@
     {
         "name": "Hunter's Bar",
         "location": "Rembrandtplein",
+        "placeid": "ChIJRY4xXpkJxkcRcFDAdFPrIIo",
+        "urlencodedname": "Hunter's+Bar,+Utrechtsestraat,+Amsterdam",
         "coords": {
             "lat": 52.3653926,
             "long": 4.8975642
@@ -322,6 +330,8 @@
     {
         "name": "Club Prime",
         "location": "Rembrandtplein",
+        "placeid": "ChIJeQFkaZUJxkcRsWcWoBFmuwU",
+        "urlencodedname": "Club+Prime,+Rembrandtplein,+Amsterdam",
         "coords": {
             "lat": 52.365629,
             "long": 4.8963052

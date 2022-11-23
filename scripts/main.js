@@ -1,6 +1,3 @@
-// import * as dotenv from 'dotenv'
-// dotenv.config()
-
 // Our bundler automatically creates styling when imported in the main JS file!
 import '../styles/main.scss'
 
@@ -75,6 +72,8 @@ function filterData(d, t) {
         return {
             name: location.name,
             location: location.location,
+            placeid: location.placeid,
+            urlencodedname: location.urlencodedname,
             coords: { lat: location.coords.lat, long: location.coords.long },
             times: location.times.filter(time => (timeFilter.includes(time.time) && dayFilter.includes(time.day)))
         };
@@ -90,7 +89,6 @@ function filterData(d, t) {
         .range([0, chartHeight])
         .paddingInner(1);
 
-    console.log(filteredData);
 };
 
 function sortData(data) {
@@ -114,6 +112,15 @@ function sortData(data) {
     })
 };
 
+function loadData() {
+    drawChart();
+    loadMap();
+}
+
+function updateData() {
+    updateChart();
+    updateMap();
+}
 
 //d3 bar chart
 
@@ -203,11 +210,6 @@ function loadMap() {
 
     map = L.map('map').setView([52.3661034287496, 4.8964865409214715], 18);
 
-    // L.tileLayer('<https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiY2hldW5ubCIsImEiOiJjbGFyZXB3MXQxczRwM251cm1zb3ZvMXhrIn0.sAdovAzrb7WWuUzqzKuYKA', {
-    //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    //     id: 'mapbox/dark-v11',
-    // }).addTo(map);
-
 
     L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
         attribution: '© <a href="https://stadiamaps.com/">Stadia Maps</a>, © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
@@ -256,7 +258,8 @@ function addMarkers() {
         }
 
         L.marker([location.coords.lat, location.coords.long], { icon: icon }).addTo(map)
-            .bindPopup(`${location.name}`)
+            .bindPopup(`${location.name} <a href="https://www.google.com/maps/dir/?api=1&destination=${location.urlencodedname}&destination_place_id=${location.placeid}" target="_blank"> Take me to this location</a>`
+            )
     })
 }
 
@@ -271,9 +274,9 @@ function addMarkers() {
 
 window.addEventListener('DOMContentLoaded', () => {
     fillDropdown();
-    loadMap(filterData("saturdayEvening", "01:00"));
-    daySelector.addEventListener("change", () => updateMap(filterData(daySelector.value, timeSelector.value)));
-    timeSelector.addEventListener("change", () => updateMap(filterData(daySelector.value, timeSelector.value)));
+    loadData(filterData("saturdayEvening", "01:00"));
+    daySelector.addEventListener("change", () => updateData(filterData(daySelector.value, timeSelector.value)));
+    timeSelector.addEventListener("change", () => updateData(filterData(daySelector.value, timeSelector.value)));
 });
 
 sortButton.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
