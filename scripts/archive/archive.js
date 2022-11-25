@@ -61,5 +61,5 @@ window.addEventListener('DOMContentLoaded', (d, t) => {
 
     d3.select(day).on("change", (d) => updateChart(day.value, time.value));
     d3.select(time).on("change", (t) => updateChart(day.value, time.value));
-    updateChart("fridayEvening", "21:00");
+    updateChart("Friday Evening", "21:00");
 });

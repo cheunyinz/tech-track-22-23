@@ -1,288 +1,313 @@
 // Our bundler automatically creates styling when imported in the main JS file!
-import '../styles/main.scss'
+import "../styles/main.scss";
 
 // We can use node_modules directely in the browser!
-import * as d3 from 'd3';
+import * as d3 from "d3";
 import { leaflet } from "leaflet";
+import * as moment from "moment";
 import { gsap } from "gsap";
-import { CSSPlugin } from 'gsap/CSSPlugin';
+import { CSSPlugin } from "gsap/CSSPlugin";
 gsap.registerPlugin(CSSPlugin);
 
-import locations from '../locations.json' assert {type: 'json'};
-import { create, filter, timeMinute } from 'd3';
+import locations from "../locations.json" assert { type: "json" };
+import { create, filter, timeMinute } from "d3";
 
-
-const daySelector = document.querySelector('#day-select');
-const timeSelector = document.querySelector('#time-select');
-const sortButton = document.querySelector('#sorting');
+const daySelector = document.querySelector("#day-select");
+const timeSelector = document.querySelector("#time-select");
+const sortButton = document.querySelector("#sorting");
 
 const chartWidth = 500;
 const chartHeight = 500;
-
 var xScale;
-
 var yScale;
-//generate dropdown menu
+
+var currentDay = moment().format('dddd');
+var currentTime = moment(moment().format('LT'), ["h A"]).format('HH:mm');
+
+console.log(currentTime)
+
+var currentDay = "Saturday";
+var currentTime = "03:00";
+
+
+
 
 function fillDropdown() {
-    let timesOutput = "";
-    let locationsTimes = [];
-    // let daysOutput = "";
-    // let locationsDays = [];
+  let timesOutput;
+  let locationsTimes = [];
+  let daysOutput;
+  let locationsDays = [];
 
-    //create a array with only the times
-    locationsTimes = locations[0].times.map((time) => {
-        return time.time;
-    });
-
-    //delete duplicate values
-    let uniqueTimes = [...new Set(locationsTimes)];
-
-    //push values in options
-    uniqueTimes.forEach(time => {
-        timesOutput += `<option value="${time}">${time}</option>`;
-    });
-
-    // locationsDays = locations[0].times.map((day) => {
-    //     return day.day;
-    // })
-
-    // let uniqueDays = [...new Set(locationsDays)];
-
-    // uniqueDays.forEach(day => {
-    //     daysOutput += `<option value="${day}">${day}</option>`;
-    // })
+  //create a array with only the times
+  locationsTimes = locations[0].times.map((time) => {
+    return time.time;
+  });
 
 
-    timeSelector.innerHTML = timesOutput;
-    // daySelector.innerHTML = daysOutput
-};
+  //delete duplicate values
+  let uniqueTimes = [...new Set(locationsTimes)];
 
+  //push values in options
+  uniqueTimes.forEach((time) => {
+    if (time.slice(0, 2).includes(currentTime.slice(0, 2))) {
+      timesOutput += `<option selected="selected" value="${time}">${time}</option>`;
+    } else {
+      timesOutput += `<option value="${time}">${time}</option>`;
+    }
+  });
+
+  locationsDays = locations[0].times.map((day) => {
+    return day.day;
+  });
+
+
+  let uniqueDays = [...new Set(locationsDays)];
+  console.log(locationsDays);
+
+  uniqueDays.forEach((day) => {
+    if (day.includes(currentDay)) {
+      daysOutput += `<option selected="selected" value="${day}">${day}</option>`
+      console.log("true")
+    } else {
+      daysOutput += `<option value="${day}">${day}</option>`;
+      console.log("false")
+    }
+
+  });
+
+  timeSelector.innerHTML = timesOutput;
+  daySelector.innerHTML = daysOutput;
+}
 
 //filter system
 let filteredData = [];
 
 function filterData(d, t) {
-    console.log("filterdata functie");
+  console.log("filterdata functie");
 
-    let dayFilter = d;
-    let timeFilter = t;
+  let dayFilter = d;
+  let timeFilter = t;
 
-    filteredData = locations.map((location) => {
-        return {
-            name: location.name,
-            location: location.location,
-            placeid: location.placeid,
-            urlencodedname: location.urlencodedname,
-            coords: { lat: location.coords.lat, long: location.coords.long },
-            times: location.times.filter(time => (timeFilter.includes(time.time) && dayFilter.includes(time.day)))
-        };
-    });
-    sortData(filteredData);
-    //OPSPLITEN IN TWEE APPARTE FUNCTIE .
-    xScale = d3.scaleLinear()
-        .domain([0, d3.max(filteredData, d => d.times[0].busy)])
-        .range([0, chartWidth]);
+  filteredData = locations.map((location) => {
+    return {
+      name: location.name,
+      location: location.location,
+      placeid: location.placeid,
+      urlencodedname: location.urlencodedname,
+      coords: { lat: location.coords.lat, long: location.coords.long },
+      times: location.times.filter(
+        (time) => timeFilter.includes(time.time.slice(0, 2)) && dayFilter.includes(time.day)
+      ),
+    };
+  });
 
-    yScale = d3.scaleBand()
-        .domain(d3.map(filteredData, d => d.name))
-        .range([0, chartHeight])
-        .paddingInner(1);
+  console.log(filteredData, "console log filtered data")
+  sortData(filteredData);
+  //OPSPLITEN IN TWEE APPARTE FUNCTIE .
+  xScale = d3
+    .scaleLinear()
+    .domain([0, d3.max(filteredData, (d) => d.times[0].busy)])
+    .range([0, chartWidth]);
 
-};
+  yScale = d3
+    .scaleBand()
+    .domain(d3.map(filteredData, (d) => d.name))
+    .range([0, chartHeight])
+    .paddingInner(1);
+}
 
 function sortData(data) {
-    let sortOrder;
+  let sortOrder;
 
-    if (sortButton.checked === true) {
-        sortOrder = true;
-        sortButton.textContent = "Sort busy low to high";
+  if (sortButton.checked === true) {
+    sortOrder = true;
+    sortButton.textContent = "Sort busy low to high";
+  } else {
+    sortOrder = false;
+    sortButton.textContent = "Sort busy high to low";
+  }
+
+  data = data.sort((a, b) => {
+    if (sortOrder === true) {
+      return a.times[0].busy - b.times[0].busy;
     } else {
-        sortOrder = false;
-        sortButton.textContent = "Sort busy high to low";
+      return b.times[0].busy - a.times[0].busy;
     }
-
-    data = data.sort((a, b) => {
-        if (sortOrder === true) {
-            return a.times[0].busy - b.times[0].busy;
-        } else {
-            return b.times[0].busy - a.times[0].busy;
-        }
-
-    })
-};
+  });
+}
 
 function loadData() {
-    drawChart();
-    loadMap();
+  drawChart();
+  loadMap();
 }
 
 function updateData() {
-    updateChart();
-    updateMap();
+  updateChart();
+  updateMap();
 }
 
 //d3 bar chart
 
 function drawChart() {
-    console.log("drawChart functie");
-    d3.select('#labels')
-        .selectAll('text')
-        .data(filteredData)
-        .join('text')
-        .attr('y', d => {
-            return yScale(d.name) + 25;
-        })
-        .text(d => d.name);
+  console.log("drawChart functie");
+  d3.select("#labels")
+    .selectAll("text")
+    .data(filteredData)
+    .join("text")
+    .attr("y", (d) => {
+      return yScale(d.name) + 25;
+    })
+    .text((d) => d.name);
 
-    d3.select('#bars')
-        .selectAll('rect')
-        .data(filteredData)
-        .join('rect')
-        .attr('height', 50)
-        .attr('rx', 5)
-        .attr('class', 'barchart__bar')
-        .attr('width', d => xScale(d.times[0].busy)) //veranderd de busy per locatie op basis van tijd.
-        .attr('y', d => yScale(d.name));
+  d3.select("#bars")
+    .selectAll("rect")
+    .data(filteredData)
+    .join("rect")
+    .attr("height", 50)
+    .attr("rx", 5)
+    .attr("class", "barchart__bar")
+    .attr("width", (d) => xScale(d.times[0].busy)) //veranderd de busy per locatie op basis van tijd.
+    .attr("y", (d) => yScale(d.name));
 
-    //dit is voor de closed text   
-    d3.select('#bars')
-        .selectAll('text')
-        .data(filteredData)
-        .join('text')
-        .attr('height', 50)
-        .attr('class', 'barchart__text')
-        .attr('y', d => yScale(d.name) + 20)
-        .text(d => (d.times[0].busy) <= 0 ? "Closed" : "");
-};
+  //dit is voor de closed text
+  d3.select("#bars")
+    .selectAll("text")
+    .data(filteredData)
+    .join("text")
+    .attr("height", 50)
+    .attr("class", "barchart__text")
+    .attr("y", (d) => yScale(d.name) + 20)
+    .text((d) => (d.times[0].busy <= 0 ? "Closed" : ""));
+}
 
 function updateChart() {
-    console.log("updateChart functie");
-    d3.select('svg').transition().duration(750);
-    d3.select('#bars')
-        .selectAll('rect')
-        .data(filteredData)
-        .join(
-            enter => {
-                enter
-            },
-            update => {
-                update.each((d, i) => {
-                    animateWidth(update.nodes()[i], xScale(d.times[0].busy))
-                    return
-                });
-            })
-    d3.select('#bars')
-        .selectAll('text')
-        .data(filteredData)
-        .join('text')
-        .text(d => (d.times[0].busy) <= 0 ? "Closed" : "");
+  console.log("updateChart functie");
+  d3.select("svg").transition().duration(750);
+  d3.select("#bars")
+    .selectAll("rect")
+    .data(filteredData)
+    .join(
+      (enter) => {
+        enter;
+      },
+      (update) => {
+        update.each((d, i) => {
+          animateWidth(update.nodes()[i], xScale(d.times[0].busy));
+          return;
+        });
+      }
+    );
+  d3.select("#bars")
+    .selectAll("text")
+    .data(filteredData)
+    .join("text")
+    .text((d) => (d.times[0].busy <= 0 ? "Closed" : ""));
 
-    d3.select('#labels')
-        .selectAll('text')
-        .data(filteredData)
-        .join('text')
-        .text(d => d.name);
+  d3.select("#labels")
+    .selectAll("text")
+    .data(filteredData)
+    .join("text")
+    .text((d) => d.name);
 }
 
 //barchart animation
 function animateWidth(node, data) {
-    gsap.to(node, {
-        width: data,
-        duration: .3
-    })
+  gsap.to(node, {
+    width: data,
+    duration: 0.3,
+  });
 
-    gsap.from(node, {
-        duration: .3
-    })
+  gsap.from(node, {
+    duration: 0.3,
+  });
 
-    return;
+  return;
 }
 
 //leaflet
 
 var map;
-// const mapApiKey = process.env.MAPBOX_API_KEY;
-
 
 function loadMap() {
-    console.log("load map")
+  console.log("load map");
 
-    map = L.map('map').setView([52.3661034287496, 4.8964865409214715], 18);
+  map = L.map("map").setView([52.3661034287496, 4.8964865409214715], 18);
 
+  L.tileLayer(
+    "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+    {
+      attribution:
+        '© <a href="https://stadiamaps.com/">Stadia Maps</a>, © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+    }
+  ).addTo(map);
 
-    L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
-        attribution: '© <a href="https://stadiamaps.com/">Stadia Maps</a>, © <a href="https://openmaptiles.org/">OpenMapTiles</a> © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    addMarkers();
-
-};
+  addMarkers();
+}
 
 function updateMap() {
-    console.log("update map");
+  console.log("update map");
 
-    map.remove();
-    loadMap();
+  map.remove();
+  loadMap();
 }
 
 function addMarkers() {
+  console.log("add marker");
 
-    console.log("add marker")
+  filteredData.forEach((location) => {
+    console.log(location.times[0].busy);
+    let icon;
 
-    filteredData.forEach(location => {
+    if (location.times[0].busy === 0) {
+      icon = L.divIcon({
+        html: "<i></i>",
+        className: "animated-icon animated-icon--empty",
+      });
+    } else if (location.times[0].busy < 25) {
+      icon = L.divIcon({
+        html: "<i></i>",
+        className: "animated-icon animated-icon--low",
+      });
+    } else if (location.times[0].busy < 75) {
+      icon = L.divIcon({
+        html: "<i></i>",
+        className: "animated-icon animated-icon--medium",
+      });
+    } else {
+      icon = L.divIcon({
+        html: "<i></i>",
+        className: "animated-icon animated-icon--high ",
+      });
+    }
 
-        console.log(location.times[0].busy);
-        let icon;
-
-        if (location.times[0].busy === 0) {
-            icon = L.divIcon({
-                html: "<i></i>",
-                className: 'animated-icon animated-icon--empty'
-            })
-        } else if (location.times[0].busy < 25) {
-            icon = L.divIcon({
-                html: "<i></i>",
-                className: 'animated-icon animated-icon--low'
-            })
-        } else if (location.times[0].busy < 75) {
-            icon = L.divIcon({
-                html: "<i></i>",
-                className: 'animated-icon animated-icon--medium'
-            })
-        } else {
-            icon = L.divIcon({
-                html: "<i></i>",
-                className: 'animated-icon animated-icon--high '
-            })
-        }
-
-        L.marker([location.coords.lat, location.coords.long], { icon: icon }).addTo(map)
-            .bindPopup(`${location.name} <a href="https://www.google.com/maps/dir/?api=1&destination=${location.urlencodedname}&destination_place_id=${location.placeid}" target="_blank"> Take me to this location</a>`
-            )
-    })
+    L.marker([location.coords.lat, location.coords.long], { icon: icon })
+      .addTo(map)
+      .bindPopup(
+        `${location.name} <a href="https://www.google.com/maps/dir/?api=1&destination=${location.urlencodedname}&destination_place_id=${location.placeid}" target="_blank"> Take me to this location</a>`
+      );
+  });
 }
 
 // window.addEventListener('DOMContentLoaded', () => {
 //     fillDropdown();
-//     drawChart(filterData("saturdayEvening", "01:00"));
+//     drawChart(filterData("Saturday Evening", "01:00"));
 //     daySelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
 //     timeSelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
 // });
 
 // sortButton.addEventListener("change", () => { console.log("change") });
 
-window.addEventListener('DOMContentLoaded', () => {
-    fillDropdown();
-    loadData(filterData("saturdayEvening", "01:00"));
-    daySelector.addEventListener("change", () => updateData(filterData(daySelector.value, timeSelector.value)));
-    timeSelector.addEventListener("change", () => updateData(filterData(daySelector.value, timeSelector.value)));
+window.addEventListener("DOMContentLoaded", () => {
+  fillDropdown();
+  loadData(filterData(`${currentDay} Evening`, "23:00"));
+  daySelector.addEventListener("change", () =>
+    updateData(filterData(daySelector.value, timeSelector.value))
+  );
+  timeSelector.addEventListener("change", () =>
+    updateData(filterData(daySelector.value, timeSelector.value))
+  );
 });
 
-sortButton.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
-
-
-
-
-
-
+sortButton.addEventListener("change", () =>
+  updateChart(filterData(daySelector.value, timeSelector.value))
+);
