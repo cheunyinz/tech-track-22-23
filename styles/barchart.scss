@@ -1,61 +1,59 @@
 .barchart {
-    margin-top: var(--xl-whitespace);
-    padding-inline: var(--md-whitespace);
-    padding-top: var(--lg-whitespace);
-    background-color: var(--white);
-    border-radius: .25rem;
+  margin-top: var(--xl-whitespace);
+  padding-inline: var(--md-whitespace);
+  padding-top: var(--lg-whitespace);
+  background-color: var(--white);
+  border-radius: 0.25rem;
 
-    &__filter {
-        fieldset {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--md-whitespace);
-            border: none;
-            margin-inline: auto;
-            max-width: 8rem;
+  &__filter {
+    fieldset {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--md-whitespace);
+      border: none;
+      margin-inline: auto;
+      max-width: 8rem;
 
-            legend {
-                margin-inline: auto;
-            }
-        }
+      legend {
+        margin-inline: auto;
+      }
     }
+  }
 
-    &__select {
-        background: none;
-        border: none;
-        display: block;
-        width: fit-content;
-        font-weight: 600;
+  &__select {
+    background: none;
+    border: none;
+    display: block;
+    width: fit-content;
+    font-weight: 600;
+  }
 
+  &__sorting {
+    background-color: var(--indochine);
+    color: var(--white);
+    text-align: center;
+    grid-column: -1 / 1;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    padding-block: var(--xs-whitespace);
+
+    input {
+      all: unset;
     }
+  }
 
-    &__sorting {
-        background-color: var(--indochine);
-        color: var(--white);
-        text-align: center;
-        grid-column: -1 / 1;
-        border-radius: 5px;
-        font-size: .75rem;
-        padding-block: var(--xs-whitespace);
+  &__inner {
+    margin-top: var(--lg-whitespace);
+  }
 
-        input {
-            all: unset;
-        }
+  &__bar {
+    fill: var(--madison);
+  }
+
+  &__labels {
+    text {
+      font-size: 2rem;
+      font-weight: 700;
     }
-
-
-    &__inner {
-        margin-top: var(--lg-whitespace);
-    }
-
-    &__bar {
-        fill: var(--madison);
-    }
-
-    &__labels {
-        text {
-            font-size: 2rem;
-            font-weight: 700;
-        }
-    }
+  }
 }

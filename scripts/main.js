@@ -3,14 +3,16 @@ import "../styles/main.scss";
 
 // We can use node_modules directely in the browser!
 import * as d3 from "d3";
+import { create, filter, timeMinute } from "d3";
+
 import { leaflet } from "leaflet";
 import * as moment from "moment";
+
 import { gsap } from "gsap";
 import { CSSPlugin } from "gsap/CSSPlugin";
 gsap.registerPlugin(CSSPlugin);
 
 import locations from "../locations.json" assert { type: "json" };
-import { create, filter, timeMinute } from "d3";
 
 const daySelector = document.querySelector("#day-select");
 const timeSelector = document.querySelector("#time-select");
@@ -18,34 +20,69 @@ const sortButton = document.querySelector("#sorting");
 
 const chartWidth = 500;
 const chartHeight = 500;
-var xScale;
-var yScale;
+let xScale;
+let yScale;
 
-var currentDay = moment().format('dddd');
-var currentTime = moment(moment().format('LT'), ["h A"]).format('HH:mm');
+let currentDay = moment().format('dddd');
+let currentTime = moment(moment().format('LT'), ["h A"]).format('HH:mm');
 
-console.log(currentTime)
+let currentDayFiltered;
+let currentTimeFiltered
 
-var currentDay = "Saturday";
-var currentTime = "03:00";
+let uniqueTimes;
+let uniqueDays;
+
+function filterCurrentDate() {
+
+  createUniqueDays();
+  createUniqueTimes();
+
+  if (uniqueDays.indexOf(`${currentDay} Evening`) >= 0) {
+    currentDayFiltered = currentDay;
+  } else {
+    currentDayFiltered = "Friday";
+  }
+
+  createUniqueTimes();
+
+  if (uniqueTimes.indexOf(currentTime) >= 0) {
+    currentTimeFiltered = currentTime;
+  } else {
+    currentTimeFiltered = "21:00";
+  }
+
+}
 
 
-
-
-function fillDropdown() {
-  let timesOutput;
+function createUniqueTimes() {
   let locationsTimes = [];
-  let daysOutput;
-  let locationsDays = [];
 
   //create a array with only the times
   locationsTimes = locations[0].times.map((time) => {
     return time.time;
   });
 
-
   //delete duplicate values
-  let uniqueTimes = [...new Set(locationsTimes)];
+  uniqueTimes = [...new Set(locationsTimes)];
+  console.log("createUniqueTimes")
+}
+
+
+function createUniqueDays() {
+  let locationsDays = [];
+
+  locationsDays = locations[0].times.map((day) => {
+    return day.day;
+  });
+
+  uniqueDays = [...new Set(locationsDays)];
+}
+
+function fillDropdown() {
+  let timesOutput;
+  let daysOutput;
+
+  createUniqueTimes();
 
   //push values in options
   uniqueTimes.forEach((time) => {
@@ -56,21 +93,13 @@ function fillDropdown() {
     }
   });
 
-  locationsDays = locations[0].times.map((day) => {
-    return day.day;
-  });
-
-
-  let uniqueDays = [...new Set(locationsDays)];
-  console.log(locationsDays);
+  createUniqueDays();
 
   uniqueDays.forEach((day) => {
     if (day.includes(currentDay)) {
       daysOutput += `<option selected="selected" value="${day}">${day}</option>`
-      console.log("true")
     } else {
       daysOutput += `<option value="${day}">${day}</option>`;
-      console.log("false")
     }
 
   });
@@ -96,7 +125,7 @@ function filterData(d, t) {
       urlencodedname: location.urlencodedname,
       coords: { lat: location.coords.lat, long: location.coords.long },
       times: location.times.filter(
-        (time) => timeFilter.includes(time.time.slice(0, 2)) && dayFilter.includes(time.day)
+        (time) => timeFilter.includes(time.time) && dayFilter.includes(time.day)
       ),
     };
   });
@@ -226,7 +255,7 @@ function animateWidth(node, data) {
 
 //leaflet
 
-var map;
+let map;
 
 function loadMap() {
   console.log("load map");
@@ -298,8 +327,9 @@ function addMarkers() {
 // sortButton.addEventListener("change", () => { console.log("change") });
 
 window.addEventListener("DOMContentLoaded", () => {
+  filterCurrentDate();
   fillDropdown();
-  loadData(filterData(`${currentDay} Evening`, "23:00"));
+  loadData(filterData(`${currentDayFiltered} Evening`, currentTimeFiltered));
   daySelector.addEventListener("change", () =>
     updateData(filterData(daySelector.value, timeSelector.value))
   );
