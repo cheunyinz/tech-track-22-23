@@ -18,10 +18,15 @@ const daySelector = document.querySelector("#day-select");
 const timeSelector = document.querySelector("#time-select");
 const sortButton = document.querySelector("#sorting");
 
-const chartWidth = 500;
-const chartHeight = 500;
+const chartDimension = {
+  width: 500,
+  height: 500,
+}
+
+
 let xScale;
 let yScale;
+
 
 let currentDay = moment().format('dddd');
 let currentTime = moment(moment().format('LT'), ["h A"]).format('HH:mm');
@@ -32,9 +37,9 @@ let uniqueDays;
 let currentDayFiltered;
 let currentTimeFiltered;
 
-function filterCurrentDate() {
+function filterCurrentDate(data) {
 
-  createUniqueDays();
+  createUniqueDays(data);
 
   //bekijk of de current day bestaat in de array van unieke dagen die ik heb in mijn data set
   if (uniqueDays.indexOf(`${currentDay} Evening`) >= 0) {
@@ -43,7 +48,7 @@ function filterCurrentDate() {
     currentDayFiltered = "Friday";
   }
 
-  createUniqueTimes();
+  createUniqueTimes(data);
   //bekijk of de current time bestaat in de array van unieke dagen die ik heb in mijn data set
 
   if (uniqueTimes.indexOf(currentTime) >= 0) {
@@ -54,11 +59,11 @@ function filterCurrentDate() {
 
 }
 
-function createUniqueTimes() {
+function createUniqueTimes(data) {
   let locationsTimes = [];
 
   //create a array with only the times
-  locationsTimes = locations[0].times.map((time) => {
+  locationsTimes = data.times.map((time) => {
     return time.time;
   });
 
@@ -67,21 +72,21 @@ function createUniqueTimes() {
 }
 
 
-function createUniqueDays() {
+function createUniqueDays(data) {
   let locationsDays = [];
 
-  locationsDays = locations[0].times.map((day) => {
+  locationsDays = data.times.map((day) => {
     return day.day;
   });
 
   uniqueDays = [...new Set(locationsDays)];
 }
 
-function fillDropdown() {
+function fillDropdown(data) {
   let timesOutput;
   let daysOutput;
 
-  createUniqueTimes();
+  createUniqueTimes(data);
 
   //push values in options
   uniqueTimes.forEach((time) => {
@@ -92,7 +97,7 @@ function fillDropdown() {
     }
   });
 
-  createUniqueDays();
+  createUniqueDays(data);
 
   uniqueDays.forEach((day) => {
     if (day.includes(currentDay)) {
@@ -128,19 +133,17 @@ function filterData(d, t) {
       ),
     };
   });
-
-  console.log(filteredData, "console log filtered data")
   sortData(filteredData);
   //OPSPLITEN IN TWEE APPARTE FUNCTIE .
   xScale = d3
     .scaleLinear()
     .domain([0, d3.max(filteredData, (d) => d.times[0].busy)])
-    .range([0, chartWidth]);
+    .range([0, chartDimension.width]);
 
   yScale = d3
     .scaleBand()
     .domain(d3.map(filteredData, (d) => d.name))
-    .range([0, chartHeight])
+    .range([0, chartDimension.height])
     .paddingInner(1);
 }
 
@@ -166,7 +169,7 @@ function sortData(data) {
 
 function loadData() {
   drawChart(filteredData);
-  loadMap();
+  loadMap(filteredData);
 }
 
 function updateData(data) {
@@ -326,8 +329,8 @@ function addMarkers(data) {
 // sortButton.addEventListener("change", () => { console.log("change") });
 
 window.addEventListener("DOMContentLoaded", () => {
-  filterCurrentDate();
-  fillDropdown();
+  filterCurrentDate(locations[0]);
+  fillDropdown(locations[0]);
   loadData(filterData(`${currentDayFiltered} Evening`, currentTimeFiltered));
   daySelector.addEventListener("change", () => {
     filterData(daySelector.value, timeSelector.value);

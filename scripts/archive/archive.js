@@ -22,7 +22,7 @@ function filterData(day, time) {
 
 
 function drawChart(locations) {
-    const chartWidth = 1000
+    const chartDimension.iwdth = 1000
     const chartHeight = 1000
 
     const yScale = d3.scaleBand()
@@ -32,7 +32,7 @@ function drawChart(locations) {
 
     const xScale = d3.scaleLinear()
         .domain([0, d3.max(locations, d => d.times[0].busy)])
-        .range([0, chartWidth])
+        .range([0, chartDimension.iwdth])
 
 
     d3.select('#labels')
