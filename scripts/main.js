@@ -6,7 +6,7 @@ import * as d3 from "d3";
 import { create, filter, timeMinute } from "d3";
 
 import { leaflet } from "leaflet";
-import * as moment from "moment";
+import moment from 'moment';
 
 import { gsap } from "gsap";
 import { CSSPlugin } from "gsap/CSSPlugin";
