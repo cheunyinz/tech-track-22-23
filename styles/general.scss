@@ -22,8 +22,10 @@ textarea {
 body {
   min-height: 100vh;
   text-rendering: optimizespeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
-  background-color: var(--madison);
+  background-color: var(--bg-color);
   font-family: "Source Sans Pro", sans-serif;
 }
 
@@ -39,10 +41,18 @@ ul {
   list-style: none;
 }
 
+a {
+  text-decoration: none;
+}
+
 :root {
-  --madison: #082a5e;
+  --bg-color: #121212;
+  --element-bg-color: #1b1b1b;
+  --primary-color: #4270b7;
+  --secondary-color: #b48151;
   --white: #ffffff;
-  --indochine: #bc5f04;
+  --secondary-text-color: #9b9b9b;
+
   --main-width: min(100% - 2rem, 60rem);
   --xs-whitespace: 0.25rem;
   --sm-whitespace: 0.5rem;

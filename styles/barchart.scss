@@ -2,8 +2,10 @@
   margin-block: var(--xl-whitespace);
   padding-inline: var(--md-whitespace);
   padding-top: var(--lg-whitespace);
-  background-color: var(--white);
+  background-color: var(--element-bg-color);
   border-radius: 0.25rem;
+  max-width: 25rem;
+  margin-inline: auto;
 
   &__filter {
     fieldset {
@@ -16,6 +18,11 @@
 
       legend {
         margin-inline: auto;
+        color: var(--secondary-text-color);
+      }
+
+      p {
+        color: var(--secondary-text-color);
       }
     }
   }
@@ -26,10 +33,11 @@
     display: block;
     width: fit-content;
     font-weight: 600;
+    color: var(--white);
   }
 
   &__sorting {
-    background-color: var(--indochine);
+    background-color: var(--secondary-color);
     color: var(--white);
     text-align: center;
     grid-column: -1 / 1;
@@ -47,13 +55,21 @@
   }
 
   &__bar {
-    fill: var(--madison);
+    fill: var(--primary-color);
+  }
+
+  &__text {
+    fill: var(--white);
+    font-size: 2rem;
+    dominant-baseline: middle;
   }
 
   &__labels {
     text {
       font-size: 2rem;
       font-weight: 700;
+      dominant-baseline: central;
+      fill: var(--white);
     }
   }
 }

@@ -9,35 +9,18 @@
   <script type="module" src="./scripts/main.js" defer></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+
 </head>
 
 <body>
-  <header></header>
 
-  <main>
-    <div class="container">
-      <section class="barchart">
-        <form class="barchart__filter">
-          <fieldset>
-            <legend>Populair locations on</legend>
-            <select id="day-select" class="barchart__select"></select>
-            <p>at</p>
-            <select id="time-select" class="barchart__select"></select>
-            <label id="sorting-text" class="barchart__sorting">
-              <input id="sorting" type="checkbox" />
-            </label>
-          </fieldset>
-        </form>
-        <svg viewbox="0 0 800 600" class="barchart__inner">
-          <g id="labels" class="barchart__labels"></g>
-          <g id="bars" class="barchart__bars" transform="translate(300, 0)"></g>
-        </svg>
-      </section>
-      <section id="map"></section>
+  <main class="container">
+    <div class="splashpage">
+      <h2 class="splashpage__text"> Find out how crowded the nightlife is in Amsterdam </h2>
+      <a class="splashpage__button" href="./information.html"> Find out </a>
     </div>
   </main>
 
-  <footer></footer>
 </body>
 
 </html>

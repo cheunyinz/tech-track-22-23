@@ -1,0 +1,23 @@
+.splashpage {
+    display: grid;
+    place-content: center;
+    min-height: 100vh;
+
+    &__text {
+        color: var(--white);
+        font-weight: bold;
+        font-size: 2rem;
+        margin-bottom: var(--lg-whitespace);
+        text-align: center;
+
+    }
+
+    &__button {
+        display: block;
+        color: var(--white);
+        background-color: var(--secondary-color);
+        margin-inline: auto;
+        padding: .5em 2em;
+
+    }
+}
