@@ -26,17 +26,17 @@ let yScale;
 let currentDay = moment().format('dddd');
 let currentTime = moment(moment().format('LT'), ["h A"]).format('HH:mm');
 
-let currentDayFiltered;
-let currentTimeFiltered
-
 let uniqueTimes;
 let uniqueDays;
+
+let currentDayFiltered;
+let currentTimeFiltered;
 
 function filterCurrentDate() {
 
   createUniqueDays();
-  createUniqueTimes();
 
+  //bekijk of de current day bestaat in de array van unieke dagen die ik heb in mijn data set
   if (uniqueDays.indexOf(`${currentDay} Evening`) >= 0) {
     currentDayFiltered = currentDay;
   } else {
@@ -44,6 +44,7 @@ function filterCurrentDate() {
   }
 
   createUniqueTimes();
+  //bekijk of de current time bestaat in de array van unieke dagen die ik heb in mijn data set
 
   if (uniqueTimes.indexOf(currentTime) >= 0) {
     currentTimeFiltered = currentTime;
@@ -52,7 +53,6 @@ function filterCurrentDate() {
   }
 
 }
-
 
 function createUniqueTimes() {
   let locationsTimes = [];
@@ -64,7 +64,6 @@ function createUniqueTimes() {
 
   //delete duplicate values
   uniqueTimes = [...new Set(locationsTimes)];
-  console.log("createUniqueTimes")
 }
 
 
@@ -116,7 +115,7 @@ function filterData(d, t) {
 
   let dayFilter = d;
   let timeFilter = t;
-
+  //create a new array with all the location info and only the day and time
   filteredData = locations.map((location) => {
     return {
       name: location.name,
@@ -166,22 +165,22 @@ function sortData(data) {
 }
 
 function loadData() {
-  drawChart();
+  drawChart(filteredData);
   loadMap();
 }
 
-function updateData() {
-  updateChart();
-  updateMap();
+function updateData(data) {
+  updateChart(data);
+  updateMap(data);
 }
 
 //d3 bar chart
 
-function drawChart() {
+function drawChart(data) {
   console.log("drawChart functie");
   d3.select("#labels")
     .selectAll("text")
-    .data(filteredData)
+    .data(data)
     .join("text")
     .attr("y", (d) => {
       return yScale(d.name) + 25;
@@ -190,7 +189,7 @@ function drawChart() {
 
   d3.select("#bars")
     .selectAll("rect")
-    .data(filteredData)
+    .data(data)
     .join("rect")
     .attr("height", 50)
     .attr("rx", 5)
@@ -201,7 +200,7 @@ function drawChart() {
   //dit is voor de closed text
   d3.select("#bars")
     .selectAll("text")
-    .data(filteredData)
+    .data(data)
     .join("text")
     .attr("height", 50)
     .attr("class", "barchart__text")
@@ -209,12 +208,12 @@ function drawChart() {
     .text((d) => (d.times[0].busy <= 0 ? "Closed" : ""));
 }
 
-function updateChart() {
+function updateChart(data) {
   console.log("updateChart functie");
   d3.select("svg").transition().duration(750);
   d3.select("#bars")
     .selectAll("rect")
-    .data(filteredData)
+    .data(data)
     .join(
       (enter) => {
         enter;
@@ -228,13 +227,13 @@ function updateChart() {
     );
   d3.select("#bars")
     .selectAll("text")
-    .data(filteredData)
+    .data(data)
     .join("text")
     .text((d) => (d.times[0].busy <= 0 ? "Closed" : ""));
 
   d3.select("#labels")
     .selectAll("text")
-    .data(filteredData)
+    .data(data)
     .join("text")
     .text((d) => d.name);
 }
@@ -257,7 +256,7 @@ function animateWidth(node, data) {
 
 let map;
 
-function loadMap() {
+function loadMap(data) {
   console.log("load map");
 
   map = L.map("map").setView([52.3661034287496, 4.8964865409214715], 18);
@@ -270,20 +269,20 @@ function loadMap() {
     }
   ).addTo(map);
 
-  addMarkers();
+  addMarkers(data);
 }
 
-function updateMap() {
+function updateMap(data) {
   console.log("update map");
 
   map.remove();
-  loadMap();
-}
+  loadMap(data);
+};
 
-function addMarkers() {
+function addMarkers(data) {
   console.log("add marker");
 
-  filteredData.forEach((location) => {
+  data.forEach((location) => {
     console.log(location.times[0].busy);
     let icon;
 
@@ -307,7 +306,7 @@ function addMarkers() {
         html: "<i></i>",
         className: "animated-icon animated-icon--high ",
       });
-    }
+    };
 
     L.marker([location.coords.lat, location.coords.long], { icon: icon })
       .addTo(map)
@@ -315,7 +314,7 @@ function addMarkers() {
         `${location.name} <a href="https://www.google.com/maps/dir/?api=1&destination=${location.urlencodedname}&destination_place_id=${location.placeid}" target="_blank"> Take me to this location</a>`
       );
   });
-}
+};
 
 // window.addEventListener('DOMContentLoaded', () => {
 //     fillDropdown();
@@ -330,14 +329,18 @@ window.addEventListener("DOMContentLoaded", () => {
   filterCurrentDate();
   fillDropdown();
   loadData(filterData(`${currentDayFiltered} Evening`, currentTimeFiltered));
-  daySelector.addEventListener("change", () =>
-    updateData(filterData(daySelector.value, timeSelector.value))
-  );
-  timeSelector.addEventListener("change", () =>
-    updateData(filterData(daySelector.value, timeSelector.value))
-  );
+  daySelector.addEventListener("change", () => {
+    filterData(daySelector.value, timeSelector.value);
+    updateData(filteredData);
+  });
+  timeSelector.addEventListener("change", () => {
+    filterData(daySelector.value, timeSelector.value);
+    updateData(filteredData)
+  });
 });
 
-sortButton.addEventListener("change", () =>
-  updateChart(filterData(daySelector.value, timeSelector.value))
+sortButton.addEventListener("change", () => {
+  filterData(daySelector.value, timeSelector.value);
+  updateChart(filteredData);
+}
 );
