@@ -332,14 +332,15 @@ window.addEventListener("DOMContentLoaded", () => {
   filterCurrentDate(locations[0]);
   fillDropdown(locations[0]);
   loadData(filterData(`${currentDayFiltered} Evening`, currentTimeFiltered));
-  daySelector.addEventListener("change", () => {
-    filterData(daySelector.value, timeSelector.value);
-    updateData(filteredData);
-  });
-  timeSelector.addEventListener("change", () => {
-    filterData(daySelector.value, timeSelector.value);
-    updateData(filteredData)
-  });
+});
+
+daySelector.addEventListener("change", () => {
+  filterData(daySelector.value, timeSelector.value);
+  updateData(filteredData);
+});
+timeSelector.addEventListener("change", () => {
+  filterData(daySelector.value, timeSelector.value);
+  updateData(filteredData)
 });
 
 sortButton.addEventListener("change", () => {
