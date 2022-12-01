@@ -32,6 +32,7 @@
 - [Leaflet](https://leafletjs.com/)
 - [moment.js](https://momentjs.com/)
 - [Sass](https://sass-lang.com/)
+- [Netlify](https://www.netlify.com)
 
 #### Readme inspiration
 
