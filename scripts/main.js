@@ -1,7 +1,7 @@
-// Our bundler automatically creates styling when imported in the main JS file!
 import "../styles/main.scss";
 
-// We can use node_modules directely in the browser!
+import locations from "../locations.json" assert { type: "json" };
+
 import * as d3 from "d3";
 import { create, filter, timeMinute } from "d3";
 
@@ -12,51 +12,57 @@ import { gsap } from "gsap";
 import { CSSPlugin } from "gsap/CSSPlugin";
 gsap.registerPlugin(CSSPlugin);
 
-import locations from "../locations.json" assert { type: "json" };
-
+/** GLOBAL VARIABLES */
 const daySelector = document.querySelector("#day-select");
 const timeSelector = document.querySelector("#time-select");
 const sortButton = document.querySelector("#sorting");
+const sortText = document.querySelector("#sorting-text-content");
 
 const chartDimension = {
   width: 500,
   height: 500,
 }
 
+let scale = {
+  x: 0,
+  y: 0,
+}
 
-let xScale;
-let yScale;
+let currentDate = {
+  day: moment().format('dddd'),
+  time: moment(moment().format('LT'), ["h A"]).format('HH:mm')
+}
+
+let uniqueDate = {
+  day: 0,
+  time: 0
+}
+
+let currentDateFiltered = {
+  day: 0,
+  time: 0
+}
 
 
-let currentDay = moment().format('dddd');
-let currentTime = moment(moment().format('LT'), ["h A"]).format('HH:mm');
-
-let uniqueTimes;
-let uniqueDays;
-
-let currentDayFiltered;
-let currentTimeFiltered;
 
 function filterCurrentDate(data) {
 
   createUniqueDays(data);
-
-  //bekijk of de current day bestaat in de array van unieke dagen die ik heb in mijn data set
-  if (uniqueDays.indexOf(`${currentDay} Evening`) >= 0) {
-    currentDayFiltered = currentDay;
+ 
+  //check if the current day exisist in the array of unique days from my data set. If not the current day will be Friday
+  if (uniqueDate.day.indexOf(`${currentDate.day} Evening`) >= 0) {
+    currentDateFiltered.day = currentDate.day;
   } else {
-    currentDayFiltered = "Friday";
+    currentDateFiltered.day = "Friday";
   }
 
   createUniqueTimes(data);
-  //bekijk of de current time bestaat in de array van unieke dagen die ik heb in mijn data set
 
-  if (uniqueTimes.indexOf(currentTime) >= 0) {
-    currentTimeFiltered = currentTime;
+  if (uniqueDate.time.indexOf(currentDate.time) >= 0) {
+    currentDateFiltered.time = currentDate.time;
   } else {
-    currentTimeFiltered = "21:00";
+    currentDateFiltered.time = "21:00";
   }
-
 }
 
 function createUniqueTimes(data) {
@@ -67,8 +73,8 @@ function createUniqueTimes(data) {
     return time.time;
   });
 
-  //delete duplicate values
-  uniqueTimes = [...new Set(locationsTimes)];
+  //delete duplicate times
+  uniqueDate.time = [...new Set(locationsTimes)];
 }
 
 
@@ -79,7 +85,7 @@ function createUniqueDays(data) {
     return day.day;
   });
 
-  uniqueDays = [...new Set(locationsDays)];
+  uniqueDate.day = [...new Set(locationsDays)];
 }
 
 function fillDropdown(data) {
@@ -88,9 +94,11 @@ function fillDropdown(data) {
 
   createUniqueTimes(data);
 
-  //push values in options
-  uniqueTimes.forEach((time) => {
-    if (time.slice(0, 2).includes(currentTime.slice(0, 2))) {
+  //push the unique dates in the dropdown
+  uniqueDate.time.forEach((time) => {
+
+    //if the time is the same as the current time, have that one selected, else not.
+    if (time.slice(0, 2).includes(currentDate.time.slice(0, 2))) {
       timesOutput += `<option selected="selected" value="${time}">${time}</option>`;
     } else {
       timesOutput += `<option value="${time}">${time}</option>`;
@@ -99,8 +107,8 @@ function fillDropdown(data) {
 
   createUniqueDays(data);
 
-  uniqueDays.forEach((day) => {
-    if (day.includes(currentDay)) {
+  uniqueDate.day.forEach((day) => {
+    if (day.includes(currentDate.day)) {
       daysOutput += `<option selected="selected" value="${day}">${day}</option>`
     } else {
       daysOutput += `<option value="${day}">${day}</option>`;
@@ -120,7 +128,7 @@ function filterData(d, t) {
 
   let dayFilter = d;
   let timeFilter = t;
-  //create a new array with all the location info and only the day and time
+  //create a new array with all the locations with its information and than only the date information of the selected date.
   filteredData = locations.map((location) => {
     return {
       name: location.name,
@@ -134,13 +142,14 @@ function filterData(d, t) {
     };
   });
   sortData(filteredData);
-  //OPSPLITEN IN TWEE APPARTE FUNCTIE .
-  xScale = d3
+
+
+  scale.x = d3
     .scaleLinear()
     .domain([0, d3.max(filteredData, (d) => d.times[0].busy)])
     .range([0, chartDimension.width]);
 
-  yScale = d3
+  scale.y = d3
     .scaleBand()
     .domain(d3.map(filteredData, (d) => d.name))
     .range([0, chartDimension.height])
@@ -152,10 +161,10 @@ function sortData(data) {
 
   if (sortButton.checked === true) {
     sortOrder = true;
-    sortButton.textContent = "Sort busy low to high";
+    sortText.textContent = "Sort busy low to high";
   } else {
     sortOrder = false;
-    sortButton.textContent = "Sort busy high to low";
+    sortText.textContent = "Sort busy high to low";
   }
 
   data = data.sort((a, b) => {
@@ -177,7 +186,7 @@ function updateData(data) {
   updateMap(data);
 }
 
-//d3 bar chart
+/** BARCHART */
 
 function drawChart(data) {
   console.log("drawChart functie");
@@ -186,7 +195,7 @@ function drawChart(data) {
     .data(data)
     .join("text")
     .attr("y", (d) => {
-      return yScale(d.name) + 25;
+      return scale.y(d.name) + 25;
     })
     .text((d) => d.name);
 
@@ -197,17 +206,17 @@ function drawChart(data) {
     .attr("height", 50)
     .attr("rx", 5)
     .attr("class", "barchart__bar")
-    .attr("width", (d) => xScale(d.times[0].busy)) //veranderd de busy per locatie op basis van tijd.
-    .attr("y", (d) => yScale(d.name));
+    .attr("width", (d) => scale.x(d.times[0].busy)) 
+    .attr("y", (d) => scale.y(d.name));
 
-  //dit is voor de closed text
+ //this is for the "Closed" text
   d3.select("#bars")
     .selectAll("text")
     .data(data)
     .join("text")
     .attr("height", 50)
     .attr("class", "barchart__text")
-    .attr("y", (d) => yScale(d.name) + 20)
+    .attr("y", (d) => scale.y(d.name) + 20)
     .text((d) => (d.times[0].busy <= 0 ? "Closed" : ""));
 }
 
@@ -223,7 +232,7 @@ function updateChart(data) {
       },
       (update) => {
         update.each((d, i) => {
-          animateWidth(update.nodes()[i], xScale(d.times[0].busy));
+          animateWidth(update.nodes()[i], scale.x(d.times[0].busy));
           return;
         });
       }
@@ -236,6 +245,7 @@ function updateChart(data) {
 
   d3.select("#labels")
     .selectAll("text")
+    .attr("height", 50)
     .data(data)
     .join("text")
     .text((d) => d.name);
@@ -255,7 +265,7 @@ function animateWidth(node, data) {
   return;
 }
 
-//leaflet
+/**LEAFLET MAP */
 
 let map;
 
@@ -289,6 +299,7 @@ function addMarkers(data) {
     console.log(location.times[0].busy);
     let icon;
 
+    //give the markers a certain color based on how busy it is
     if (location.times[0].busy === 0) {
       icon = L.divIcon({
         html: "<i></i>",
@@ -319,19 +330,10 @@ function addMarkers(data) {
   });
 };
 
-// window.addEventListener('DOMContentLoaded', () => {
-//     fillDropdown();
-//     drawChart(filterData("Saturday Evening", "01:00"));
-//     daySelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
-//     timeSelector.addEventListener("change", () => updateChart(filterData(daySelector.value, timeSelector.value)));
-// });
-
-// sortButton.addEventListener("change", () => { console.log("change") });
-
 window.addEventListener("DOMContentLoaded", () => {
   filterCurrentDate(locations[0]);
   fillDropdown(locations[0]);
-  loadData(filterData(`${currentDayFiltered} Evening`, currentTimeFiltered));
+  loadData(filterData(`${currentDateFiltered.day} Evening`, currentDateFiltered.time));
 });
 
 daySelector.addEventListener("change", () => {

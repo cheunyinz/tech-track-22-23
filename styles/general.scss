@@ -48,8 +48,8 @@ a {
 :root {
   --bg-color: #121212;
   --element-bg-color: #1b1b1b;
-  --primary-color: #4270b7;
-  --secondary-color: #b48151;
+  --primary-color: #515AF5;
+  --secondary-color: #b56b45;
   --white: #ffffff;
   --secondary-text-color: #9b9b9b;
 
@@ -64,6 +64,20 @@ a {
 .container {
   width: var(--main-width);
   margin-inline: auto;
+}
+
+footer {
+  height: 2.5rem;
+  display: grid;
+  place-content: center;
+
+  p {
+    color: var(--secondary-text-color);
+
+    a {
+      color: var(--secondary-text-color);
+    }
+  }
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;700&display=swap");

@@ -23,6 +23,7 @@
 
       p {
         color: var(--secondary-text-color);
+        margin-left: -5px;
       }
     }
   }
@@ -52,6 +53,11 @@
 
   &__inner {
     margin-top: var(--lg-whitespace);
+
+    text {
+      dominant-baseline: mathematical;
+
+    }
   }
 
   &__bar {
@@ -60,8 +66,8 @@
 
   &__text {
     fill: var(--white);
-    font-size: 2rem;
-    dominant-baseline: middle;
+    font-size: 2.25rem;
+    dominant-baseline: central;
   }
 
   &__labels {
