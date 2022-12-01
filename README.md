@@ -2,6 +2,7 @@
 
 <div align="center">For this course I created a mobile web app where you can see how busy it is at bars and clubs in Amsterdam. This app is focused on students and tourists going out.
 
+
 [Check out the web app](https://cheun-id-tech-track.netlify.app/)
 
 ### Get started
