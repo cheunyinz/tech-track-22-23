@@ -27,7 +27,7 @@
 ### This project is build with
 
 - [vite](https://vitejs.dev/)
-- [D3]](https://d3js.org/)
+- [D3](https://d3js.org/)
 - [GreenSock GSAP](https://greensock.com/gsap/leaf)
 - [Leaflet](https://leafletjs.com/)
 - [moment.js](https://momentjs.com/)
